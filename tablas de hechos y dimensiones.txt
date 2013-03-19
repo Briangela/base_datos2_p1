@@ -1,0 +1,154 @@
+----------------------------//////////////////////////////////////////HECHO SOLICITUDES/////////////////////////////////////--
+
+----------TABLA DE DIMENSIÓN CENTRO DE COSTO-------------
+
+CREATE TABLE CENTRO_DE_COSTO(
+Id_Centro_Costo NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Centro_Costo VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN LOCALIDAD-------------------
+
+CREATE TABLE LOCALIDAD(
+Id_Localidad NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Localidad VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN ÁREA-------------------
+
+CREATE TABLE AREA(
+Id_Area NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Area VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN STATUS-------------------
+
+CREATE TABLE STATUS(
+Id_Status NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Status VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN FECHA-------------------
+
+CREATE TABLE FECHA(
+Id_Fecha NUMBER(8)      NOT NULL PRIMARY KEY,
+Año      NUMBER(8)      NOT NULL,
+Mes      NUMBER(8)      NOT NULL
+);
+
+----------TABLA DE HECHOS SOLICTUDES--------------------
+
+CREATE TABLE SOLICITUDES(
+Id_Centro_Costo 	NUMBER(8) 	NOT NULL,
+Id_Localidad    	NUMBER(8) 	NOT NULL,
+Id_Area         	NUMBER(8) 	NOT NULL,
+Id_Status       	NUMBER(8) 	NOT NULL,
+Id_Fecha        	NUMBER(8) 	NOT NULL,
+Porc_Solicitudes	NUMBER(8,3) 	NOT NULL,
+Cant_Fallas_Asociadas	NUMBER(8)	NOT NULL,
+Cant_Solic_Estado	NUMBER(8)	NOT NULL,
+Cant_Fallas_mas_Atend	NUMBER(8)	NOT NULL,
+CONSTRAINT	PK_SOLICITUDES		PRIMARY KEY (Id_Centro_Costo,Id_Localidad,Id_Area,Id_Status,Id_Fecha),
+CONSTRAINT 	FK_ID_CENTRO_COSTO	FOREIGN KEY (Id_Centro_Costo) 		REFERENCES 	CENTRO_DE_COSTO(Id_Centro_Costo),
+CONSTRAINT 	FK_ID_LOCALIDAD		FOREIGN KEY (Id_Localidad) 		REFERENCES 	LOCALIDAD(Id_Localidad),
+CONSTRAINT 	FK_ID_AREA		FOREIGN KEY (Id_Area) 			REFERENCES 	AREA(Id_Area),
+CONSTRAINT 	FK_ID_STATUS		FOREIGN KEY (Id_Status) 		REFERENCES 	STATUS(Id_Status),
+CONSTRAINT 	FK_FECHA		FOREIGN KEY (Id_Fecha) 			REFERENCES 	FECHA(Id_Fecha),
+);
+
+---------------------------//////////////////////////////////////////HECHO PERSONAL DE SERVCIO/////////////////////////////////////--
+
+---------TABLA DE DIMENSIÓN SERVICIO-------------------
+
+CREATE TABLE SERVICIO(
+Id_Servicio NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Servicio VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN PERSONA-------------------
+
+CREATE TABLE PERSONA(
+Id_Persona NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Persona VARCHAR2(50)   NOT NULL
+);
+
+----------TABLA DE HECHOS PERSONAL DE SERVICIO---------------
+
+CREATE TABLE PERSONAL_SERVICIO(
+Id_Localidad    	NUMBER(8) 	NOT NULL,
+Id_Area         	NUMBER(8) 	NOT NULL,
+Id_Servicio         	NUMBER(8) 	NOT NULL,
+Id_Persona       	NUMBER(8) 	NOT NULL,
+Id_Fecha        	NUMBER(8) 	NOT NULL,
+Cant_Obr_Atendidas	NUMBER(8)	NOT NULL,
+Porc_Ocupacion		NUMBER(8,3) 	NOT NULL,
+Cant_Obra_Aten_Simul	NUMBER(8)	NOT NULL,
+Cant_ManObra_Falt	NUMBER(8)	NOT NULL,
+CONSTRAINT	PK_PERSONAL_SERVICIO	PRIMARY KEY (Id_Localidad,Id_Area,Id_Servicio,Id_Persona,Id_Fecha),
+CONSTRAINT 	FK_ID_LOCALIDAD		FOREIGN KEY (Id_Localidad) 		REFERENCES 	LOCALIDAD(Id_Localidad),
+CONSTRAINT 	FK_ID_AREA		FOREIGN KEY (Id_Area) 			REFERENCES 	AREA(Id_Area),
+CONSTRAINT 	FK_ID_SERIVIO		FOREIGN KEY (Id_Servicio) 		REFERENCES 	SERVICIO(Id_Servicio),
+CONSTRAINT 	FK_PERSONA		FOREIGN KEY (Id_Persona) 		REFERENCES 	PERSONA(Id_Persona),
+CONSTRAINT 	FK_FECHA		FOREIGN KEY (Id_Fecha) 			REFERENCES 	FECHA(Id_Fecha),
+);
+
+------------------------------//////////////////////////////////////////HECHO TIEMPO/////////////////////////////////////--
+
+---------TABLA DE DIMENSIÓN FALLAS-------------------
+
+CREATE TABLE FALLAS(
+Id_Falla NUMBER(8)      NOT NULL PRIMARY KEY,
+Nb_Falla VARCHAR2(50)   NOT NULL
+);
+
+---------TABLA DE DIMENSIÓN SOLICITUDES-------------------
+
+CREATE TABLE SOLICITUDES(
+Id_Solicitud NUMBER(8)      NOT NULL PRIMARY KEY,
+Fe_Solicitud VARCHAR2(50)   NOT NULL
+);
+
+----------TABLA DE HECHOS TIEMPO---------------
+
+CREATE TABLE TIEMPO(
+Id_Status	    	NUMBER(8) 	NOT NULL,
+Id_Centro_Costo    	NUMBER(8) 	NOT NULL,
+Id_Localidad    	NUMBER(8) 	NOT NULL,
+Id_Falla         	NUMBER(8) 	NOT NULL,
+Id_Solicitud         	NUMBER(8) 	NOT NULL,
+Id_Fecha        	NUMBER(8) 	NOT NULL,
+Cant_Tiem_Pro_Solic	NUMBER(8,3)	NOT NULL,
+Cant_Tiem_Trascurr	NUMBER(8)	NOT NULL,
+Cant_Tiem_Respuest	NUMBER(8)	NOT NULL,
+CONSTRAINT	PK_TIEMPO		PRIMARY KEY (Id_Status,Id_Centro_Costo,Id_Localidad,Id_Falla,Id_Solicitud,Id_Fecha),
+CONSTRAINT 	FK_ID_STATUS		FOREIGN KEY (Id_Status) 		REFERENCES 	STATUS(Id_Status),
+CONSTRAINT 	FK_ID_CENTRO_COSTO	FOREIGN KEY (Id_Centro_Costo) 		REFERENCES 	CENTRO_DE_COSTO(Id_Centro_Costo),
+CONSTRAINT 	FK_ID_LOCALIDAD		FOREIGN KEY (Id_Localidad) 		REFERENCES 	LOCALIDAD(Id_Localidad),
+CONSTRAINT 	FK_ID_FALLA		FOREIGN KEY (Id_Falla) 			REFERENCES 	FALLAS(Id_Falla),
+CONSTRAINT 	FK_ID_SOLICITUD		FOREIGN KEY (Id_Solicitud) 		REFERENCES 	SOLICITUDES(Id_Solicitud),
+CONSTRAINT 	FK_FECHA		FOREIGN KEY (Id_Fecha) 			REFERENCES 	FECHA(Id_Fecha),
+);
+
+------------------------------//////////////////////////////////////////HECHO INVENTARIO DE MATERIAL/////////////////////////////////////--
+
+
+----------TABLA DE HECHOS INVENTARIO MATERIAL---------------
+
+CREATE TABLE TIEMPO(
+Id_Status	    	NUMBER(8) 	NOT NULL,
+Id_Centro_Costo    	NUMBER(8) 	NOT NULL,
+Id_Localidad    	NUMBER(8) 	NOT NULL,
+Id_Falla         	NUMBER(8) 	NOT NULL,
+Id_Solicitud         	NUMBER(8) 	NOT NULL,
+Id_Fecha        	NUMBER(8) 	NOT NULL,
+Cant_Tiem_Pro_Solic	NUMBER(8,3)	NOT NULL,
+Cant_Tiem_Trascurr	NUMBER(8)	NOT NULL,
+Cant_Tiem_Respuest	NUMBER(8)	NOT NULL,
+CONSTRAINT	PK_TIEMPO		PRIMARY KEY (Id_Status,Id_Centro_Costo,Id_Localidad,Id_Falla,Id_Solicitud,Id_Fecha),
+CONSTRAINT 	FK_ID_STATUS		FOREIGN KEY (Id_Status) 		REFERENCES 	STATUS(Id_Status),
+CONSTRAINT 	FK_ID_CENTRO_COSTO	FOREIGN KEY (Id_Centro_Costo) 		REFERENCES 	CENTRO_DE_COSTO(Id_Centro_Costo),
+CONSTRAINT 	FK_ID_LOCALIDAD		FOREIGN KEY (Id_Localidad) 		REFERENCES 	LOCALIDAD(Id_Localidad),
+CONSTRAINT 	FK_ID_FALLA		FOREIGN KEY (Id_Falla) 			REFERENCES 	FALLAS(Id_Falla),
+CONSTRAINT 	FK_ID_SOLICITUD		FOREIGN KEY (Id_Solicitud) 		REFERENCES 	SOLICITUDES(Id_Solicitud),
+CONSTRAINT 	FK_FECHA		FOREIGN KEY (Id_Fecha) 			REFERENCES 	FECHA(Id_Fecha),
+);
